@@ -49,7 +49,7 @@ class TestGitHubTestBed(unittest.TestCase):
     def test_parse_user_payload_missing_profile(self):
         payload = {}
         res = parse_user_payload(payload)
-        self.assertIsNone(res)
+        self.assertEqual(res, {"theme": "light", "notifications": True})
 
     def test_format_api_response_null(self):
         res = format_api_response(None)
