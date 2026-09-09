@@ -51,6 +51,11 @@ class TestGitHubTestBed(unittest.TestCase):
         res = parse_user_payload(payload)
         self.assertEqual(res, {"theme": "light", "notifications": True})
 
+    def test_parse_user_payload_null_profile_or_settings(self):
+        self.assertEqual(parse_user_payload(None), {"theme": "light", "notifications": True})
+        self.assertEqual(parse_user_payload({"profile": None}), {"theme": "light", "notifications": True})
+        self.assertEqual(parse_user_payload({"profile": {"settings": None}}), {"theme": "light", "notifications": True})
+
     def test_format_api_response_null(self):
         res = format_api_response(None)
         self.assertEqual(res["status"], 200)
