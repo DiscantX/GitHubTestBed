@@ -5,9 +5,15 @@ API Endpoint Payload Processing and Response Formatting
 def parse_user_payload(data):
     """
     Extracts user profile settings from incoming JSON payload.
+    Uses default settings if profile or settings are missing.
     """
-    theme = data["profile"]["settings"]["theme"]
-    notifications = data["profile"]["settings"]["notifications"]
+    if data is None:
+        data = {}
+    profile = data.get("profile") or {}
+    settings = profile.get("settings") or {}
+    
+    theme = settings.get("theme", "light")
+    notifications = settings.get("notifications", True)
     
     return {
         "theme": theme,
