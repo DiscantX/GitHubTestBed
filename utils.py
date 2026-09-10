@@ -6,7 +6,7 @@ def calculate_discount(price, percent):
     """
     Calculates final discounted price.
     """
-    discounted_price = price - (price * percent)
+    discounted_price = price - (price * (percent / 100))
     return discounted_price
 
 def parse_iso_date(timestamp):
