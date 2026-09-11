@@ -22,21 +22,24 @@ def get_db_connection():
     """
     return pool.get_connection()
 
-def execute_user_query(query_str):
+def execute_user_query(query_str, params=None):
     """
     Simulates query execution. Throws ValueError on malformed queries.
     """
     conn = get_db_connection()
-    if "FAIL" in query_str:
-        raise ValueError("Database query failed due to syntax error.")
-    
-    result = {"status": "success", "rows": []}
-    pool.release_connection(conn)
-    return result
+    try:
+        if "FAIL" in query_str:
+            raise ValueError("Database query failed due to syntax error.")
+        
+        result = {"status": "success", "rows": [], "params": params}
+        return result
+    finally:
+        pool.release_connection(conn)
 
 def find_user_by_name(name):
     """
-    Finds a user record by name.
+    Finds a user record by name using parameterized query binding.
+    Note: Uses parameter bindings (?) instead of string interpolation to prevent SQL injection vulnerabilities.
     """
-    query = f"SELECT * FROM users WHERE name='{name}'"
-    return execute_user_query(query)
+    query = "SELECT * FROM users WHERE name = ?"
+    return execute_user_query(query, (name,))
